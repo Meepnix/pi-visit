@@ -1,6 +1,9 @@
+import cv2
+
+
 def scan_qr():
 
-    import cv2
+    
 
     # set up camera object
     cap = cv2.VideoCapture(0)
