@@ -23,7 +23,7 @@ class database:
 
         self.dbcur = self.conn.cursor()
 
-    def execSql(self, statement):
+    def exec_sql(self, statement):
 
         conn = self.conn
         dbcur = conn.cursor()
@@ -40,7 +40,7 @@ class database:
             conn.commit()
             dbcur.close()
 
-    def execSqlFetchone(self, statement):
+    def exec_sql_fetchone(self, statement):
 
         conn = self.conn
         dbcur = conn.cursor()
@@ -58,17 +58,17 @@ class database:
 
             dbcur.close()
 
-    def checkTables(self, tables: str):
+    def check_tables(self, tables: str):
 
         for table in tables:
             print(table + " : " +
-            str(self.checkTableExists(table)))
+            str(self.check_table_exists(table)))
 
     # Do argument parsing here (eg. with argparse) and anything else
     # you want your project to do. Return values are exit codes.
 
 
-    def checkTableExists(self, tablename: str) -> bool:
+    def check_table_exists(self, tablename: str) -> bool:
         self.dbcur = self.conn.cursor()
         self.dbcur.execute("""
         SELECT COUNT(*)
@@ -82,9 +82,9 @@ class database:
         self.dbcur.close()
         return False
 
-    def createTables(self):
+    def create_tables(self):
 
-        self.execSql("""
+        self.exec_sql("""
             CREATE TABLE qrcode (
             id int UNSIGNED NOT NULL AUTO_INCREMENT,
             status varchar(255),
@@ -95,7 +95,7 @@ class database:
             PRIMARY KEY (id)
             ) ENGINE = InnoDB;""")
 
-        self.execSql("""
+        self.exec_sql("""
             CREATE TABLE qrlogs (
             id int UNSIGNED NOT NULL AUTO_INCREMENT,
             qrcode_id int UNSIGNED NOT NULL,
@@ -110,60 +110,60 @@ class database:
             ) ENGINE = InnoDB;""")
     
     
-    def dropTables(self):
+    def droptables(self):
 
-        self.execSql("""
+        self.exec_sql("""
             DROP TABLE IF EXISTS qrlogs,qrcode;
         """)
 
-    def createQrcode(self, code):
+    def create_qr_code(self, code):
 
-        self.execSql(f"""
+        self.exec_sql(f"""
         INSERT INTO qrcode (qrcode) 
         VALUES ({code});
         """)
 
-    def addImageLink(self, link, id):
+    def add_image_link(self, link, id):
 
-        self.execSql(f"""
+        self.exec_sql(f"""
         UPDATE qrcode
         SET img_link = '{link}'
         WHERE id = {id};
         """)
 
-    def updateQrcodeStatus(self, status, id):
+    def update_qr_code_status(self, status, id):
 
-        self.execSql(f"""
+        self.exec_sql(f"""
         UPDATE qrcode
         SET status = '{status}'
         WHERE id = {id};
         """)
         
 
-    def createQrlog(self, status, id):
+    def create_qr_log(self, status, id):
 
-        self.execSql(f"""
+        self.exec_sql(f"""
         INSERT INTO qrlogs (qrcode_id, status) 
         VALUES ({id}, '{status}');
         """)
 
-    def logQr(self, qrcode, img_link=None):
+    def log_qr(self, qrcode, img_link=None):
 
-        result = self.execSqlFetchone(f"""
+        result = self.exec_sql_fetchone(f"""
         SELECT id, status FROM qrcode 
         WHERE qrcode = '{qrcode}';
         """)
 
         if img_link:
-            self.addImageLink(img_link, result[0])
+            self.add_image_link(img_link, result[0])
 
         if not result[1] or result[1] == 'OUT':
-            self.updateQrcodeStatus('IN', result[0])
-            self.createQrlog('IN', result[0])
+            self.update_qr_code_status('IN', result[0])
+            self.create_qr_log('IN', result[0])
 
         else:
-            self.updateQrcodeStatus('OUT', result[0])
-            self.createQrlog('OUT', result[0])
+            self.update_qr_code_status('OUT', result[0])
+            self.create_qr_log('OUT', result[0])
         
 
 

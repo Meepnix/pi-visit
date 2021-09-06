@@ -1,22 +1,19 @@
 import cv2
 
 
-def scan_qr():
+class Scan():
 
-    
+    def __init__(self):
 
-    # set up camera object
-    cap = cv2.VideoCapture(0)
+        # QR code detection object
+        self.detector = cv2.QRCodeDetector()
+        self.success = False
 
-    # QR code detection object
-    detector = cv2.QRCodeDetector()
+    def scan_qr(self, img):
 
-
-    while True:
-        # get the image
-        _, img = cap.read()
         # get bounding box coords and data
-        retval, decoded_info, points, straight_qrcode = detector.detectAndDecodeMulti(img)
+        retval, decoded_info, points, straight_qrcode = self.detector.detectAndDecodeMulti(
+            img)
 
         if len(decoded_info) == 2:
             print("data found: ")
@@ -42,21 +39,20 @@ def scan_qr():
                 w = second_array_one[0] - x
                 h = second_array_third[1] - y
 
+            self.crop_img = img[y:y+h, x:x+w]
+            self.success = True
+
+            return True
+    
+    def get_img(self):
+
+        if self.success:
+            return self.crop_img
+        else:
+            return False
 
 
-            crop_img = img[y:y+h, x:x+w]
 
-            cv2.imshow("Image", crop_img)
-
-        # display the image preview
-        cv2.imshow("code detector", img)
-        
-        if(cv2.waitKey(1) == ord("q")):
-            break
-        
-    # free camera object and exit
-    cap.release()
-    cv2.destroyAllWindows()
 
 
 
