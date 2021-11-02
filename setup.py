@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name="signin-pi",
+    name="pi-visit",
     version="0.1.0",
-    packages=["signin_pi"],
+    packages=["pi_visit"],
     entry_points={
         "console_scripts": [
-            "signin_pi = signin_pi.__main__:main"
+            "pi_visit = pi_visit.__main__:main"
         ]
     },
 )

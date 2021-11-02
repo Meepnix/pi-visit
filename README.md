@@ -1,5 +1,5 @@
-# signin-pi
-Sign-in via a raspberry pi
+# pi-visit
+pi-visit via a raspberry pi
 
 
 # setup
