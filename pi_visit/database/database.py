@@ -60,7 +60,11 @@ class database:
 
     def check_tables(self, tables: str):
 
+        status = True
+
         for table in tables:
+            if self.check_table_exists(table) == False:
+                status = False
             print(table + " : " +
             str(self.check_table_exists(table)))
 
@@ -78,7 +82,6 @@ class database:
         if self.dbcur.fetchone()[0] == 1:
             self.dbcur.close()
             return True
-        self.conn.commit()
         self.dbcur.close()
         return False
 

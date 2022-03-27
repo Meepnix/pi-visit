@@ -3,6 +3,7 @@
 import sys
 from PySide2.QtWidgets import QApplication
 from dotenv import load_dotenv
+import argparse
 
 
 #from signin_pi.scan import scan
@@ -14,25 +15,39 @@ from pi_visit.ui import ui
 def main(args=None):
     """The main routine."""
 
-    #import signin_pi.scan
-    tables = ['qrcode', 'qrlogs']
+    load_dotenv()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-setup', action='store_true')
+    args = parser.parse_args()
+
+    if args.setup == True:
+
+        print("Setup begins!")
+        setup()
 
     load_dotenv()
 
-    if args is None:
-        args = sys.argv[1:]
-
-    print("This is the main routine meep.")
-
-    #new = database.database()
-    #new.create_qr_code('3204271')
-    
-
+    print("Main routine begins.")
 
     app = QApplication(sys.argv)
     win = ui.MainApp()
     win.show()
     sys.exit(app.exec_())
+
+def setup():
+
+    print("Setup")
+
+    tables = ['qrcode', 'qrlogs']
+
+    new = database.database()
+    if new.check_tables(tables) == False:
+        new.create_tables()
+
+    print("Setup complete!")
+
+
 
 
 

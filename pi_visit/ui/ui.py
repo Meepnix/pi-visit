@@ -2,9 +2,6 @@ from PySide2.QtCore import QSize, QTimer
 from PySide2.QtGui import QImage, QPixmap, QFont
 from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout
 
-from pydub import AudioSegment
-from pydub.playback import play
-
 from pi_visit.scan import scan
 import cv2
 import sys
