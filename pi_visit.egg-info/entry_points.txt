@@ -1,0 +1,3 @@
+[console_scripts]
+pi_visit = pi_visit.__main__:main
+

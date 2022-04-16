@@ -30,5 +30,6 @@ sudo apt-get install python3-gst-1.0
 sudo apt-get install python-pygame
 
 # database
-
-
+sudo apt install mariadb-server
+sudo apt-get install libmariadb3 libmariadb-dev
+sudo pip3 install mariadb

@@ -30,10 +30,8 @@ def main(args=None):
 
     print("Main routine begins.")
 
-    app = QApplication(sys.argv)
-    win = ui.MainApp()
-    win.show()
-    sys.exit(app.exec_())
+    ui.start()
+   
 
 def setup():
 
