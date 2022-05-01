@@ -113,7 +113,19 @@ class Scan():
         os.chdir(self.directory)
         cv2.imwrite(filename + '.jpg', self.cropped_img)
 
+    def scan_singleqr_img(self, img):
 
+        # get bounding box coords and data
+        retval, vectors, straight_qrcode = self.detector.detectAndDecode(
+            img)
+
+        if retval is not None:
+ 
+            print("decoded_info", retval)
+
+            self.success_qr, self.status = self.dbo.log_qr(retval)
+
+            return self.success_qr
 
 
 

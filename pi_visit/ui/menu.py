@@ -9,17 +9,35 @@ class Menu(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.win = None
-        self.button = QPushButton("Push for Multi QR")
-        self.button.clicked.connect(self.show_multi_qr_window)
-        self.setCentralWidget(self.button)
+        self.win_multi = None
+        self.win_single = None
+
+        self.button_single = QPushButton("Push for Single QR")
+        self.button_multi = QPushButton("Push for Multi QR")
+        self.button_single.clicked.connect(self.show_single_qr_window)
+        self.button_multi.clicked.connect(self.show_multi_qr_window)
+
+        self.widget = QWidget()
+        self.menu_layout = QVBoxLayout(self.widget)
+        self.menu_layout.addWidget(self.button_single)
+        self.menu_layout.addWidget(self.button_multi)
+        self.setCentralWidget(self.widget)
 
 
     def show_multi_qr_window(self):
 
-        if self.win is None:
-            self.win = qr.MultiQr()
-            self.win.show()
-        elif not self.win.isVisible():
-            self.win.show()
+        if self.win_multi is None:
+            self.win_multi = qr.MultiQr()
+            self.win_multi.show()
+        elif not self.win_multi.isVisible():
+            self.win_multi.show()
+
+    def show_single_qr_window(self):
+        
+        if self.win_single is None:
+            self.win_single = qr.SingleQR()
+            self.win_single.show()
+        elif not self.win_single.isVisible():
+            self.win_single.show()
+        
 
