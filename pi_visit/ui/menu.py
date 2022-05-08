@@ -31,6 +31,7 @@ class Menu(QMainWindow):
             self.win_multi.show()
         elif not self.win_multi.isVisible():
             self.win_multi.show()
+            self.win_multi.reset()
 
     def show_single_qr_window(self):
         
@@ -39,5 +40,6 @@ class Menu(QMainWindow):
             self.win_single.show()
         elif not self.win_single.isVisible():
             self.win_single.show()
+            self.win_single.reset()
         
 
