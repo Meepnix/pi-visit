@@ -1,12 +1,36 @@
+ ```
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+          $$\                   $$\           $$\   $$\     
+          \__|                  \__|          \__|  $$ |    
+ $$$$$$\  $$\        $$\    $$\ $$\  $$$$$$$\ $$\ $$$$$$\   
+$$  __$$\ $$ |$$$$$$\\$$\  $$  |$$ |$$  _____|$$ |\_$$  _|  
+$$ /  $$ |$$ |\______|\$$\$$  / $$ |\$$$$$$\  $$ |  $$ |    
+$$ |  $$ |$$ |         \$$$  /  $$ | \____$$\ $$ |  $$ |$$\ 
+$$$$$$$  |$$ |          \$  /   $$ |$$$$$$$  |$$ |  \$$$$  |
+$$  ____/ \__|           \_/    \__|\_______/ \__|   \____/ 
+$$ |                                                        
+$$ |                                                        
+\__|
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
 
+ ```
 
 Music by EdR Pixabay
 
 # pi-visit
-pi-visit via a raspberry pi
 
+pi-visit is a contactless sign in project running on a raspberry pi
 
-# setup
+## Requirements
+
+Raspberry Pi 4
+raspbian 64 bit OS
+Compartible Webcam
+
+## setup
+
 sudo apt-get update
 
 sudo apt-get install python3-opencv
@@ -14,22 +38,20 @@ sudo apt-get install python3-opencv
 sudo apt-get install libqt4-test python3-sip python3-pyqt5 libqtgui4 libjasper-dev libatlas-base-dev -y
 
 pip3 install opencv-contrib-python==4.4.0.46
+
 pip3 install python-dotenv
 
 sudo apt-get install python3-pyside2.qt3dcore python3-pyside2.qt3dinput python3-pyside2.qt3dlogic python3-pyside2.qt3drender python3-pyside2.qtcharts python3-pyside2.qtconcurrent python3-pyside2.qtcore python3-pyside2.qtgui python3-pyside2.qthelp python3-pyside2.qtlocation python3-pyside2.qtmultimedia python3-pyside2.qtmultimediawidgets python3-pyside2.qtnetwork python3-pyside2.qtopengl python3-pyside2.qtpositioning python3-pyside2.qtprintsupport python3-pyside2.qtqml python3-pyside2.qtquick python3-pyside2.qtquickwidgets python3-pyside2.qtscript python3-pyside2.qtscripttools python3-pyside2.qtsensors python3-pyside2.qtsql python3-pyside2.qtsvg python3-pyside2.qttest python3-pyside2.qttexttospeech python3-pyside2.qtuitools python3-pyside2.qtwebchannel python3-pyside2.qtwebsockets python3-pyside2.qtwidgets python3-pyside2.qtx11extras python3-pyside2.qtxml python3-pyside2.qtxmlpatterns python3-pyside2uic
 
-# sound alternative
+## sound alternative
 
 sudo apt-get install ffmpeg libavcodec-extra
 pip3 install pydub
-
-
 sudo apt-get install python3-gst-1.0
-
-
 sudo apt-get install python-pygame
 
-# database
+## database
+
 sudo apt install mariadb-server
 sudo apt-get install libmariadb3 libmariadb-dev
 sudo pip3 install mariadb
