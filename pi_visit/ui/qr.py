@@ -26,8 +26,8 @@ class Qr(QWidget):
         self.setup_camera()
         self.setup_sound()
         self.scan = scan.Scan()
-        
 
+        
     def setup_ui(self):
 
         self.title_label = QLabel()
@@ -45,6 +45,8 @@ class Qr(QWidget):
         self.main_layout.addWidget(self.status_label)
         self.main_layout.addWidget(self.quit_button)
         self.setLayout(self.main_layout)
+        self.setWindowTitle(self.get_title())
+
 
     def setup_camera(self):
         
@@ -57,18 +59,22 @@ class Qr(QWidget):
         self.timer.timeout.connect(self.display_video_stream)
         self.timer.start(30)
 
+
     @abstractmethod
     def display_video_stream(self):
         pass
+
 
     @abstractmethod
     def get_title(self):
         pass
 
+
     def check_show_status(self):
 
         self.status_label.setText(self.scan.get_status())
         self.status_label.show()
+
     
     def continue_scan(self):
 
@@ -80,10 +86,12 @@ class Qr(QWidget):
             self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 
                 self.video_size.height())
             self.timer.start(30)
+
     
     def release_scan(self):
         self.timer.stop()
         self.capture.release()
+
 
     def setup_sound(self):
         
@@ -91,10 +99,12 @@ class Qr(QWidget):
         pygame.mixer.music.load(
             "/home/pi/Documents/Projects/pi-visit/sounds/beep-sound.wav")
 
+
     def play_success_sound(self):
 
         print('play sound')
         pygame.mixer.music.play()
+
         
     def closeEvent(self, event):
         print("event")
@@ -109,6 +119,7 @@ class Qr(QWidget):
         else:
             event.ignore()
 
+
     def read_config_update(self):
         config = configparser.ConfigParser()
         config.read(self.directory + 'config.ini')
@@ -119,8 +130,10 @@ class Qr(QWidget):
 
         self.update_ui_settings()
 
+
     def update_ui_settings(self):
         self.image_label.setFixedSize(self.video_size)
+
 
     def reset(self):
         self.read_config_update()
@@ -128,8 +141,8 @@ class Qr(QWidget):
         self.continue_scan()
         
 
-
 class MultiQr(Qr):
+
 
     def display_video_stream(self):
         
@@ -143,7 +156,6 @@ class MultiQr(Qr):
             self.check_show_status()
             QTimer.singleShot(15000, self.continue_scan)
 
-            
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
 
         image = QImage(self.frame, self.frame.shape[1], self.frame.shape[0], 
@@ -175,6 +187,7 @@ class SingleQR(Qr):
         image = QImage(self.frame, self.frame.shape[1], self.frame.shape[0], 
             self.frame.strides[0], QImage.Format_RGB888)
         self.image_label.setPixmap(QPixmap.fromImage(image))
+
 
     def get_title(self):
 

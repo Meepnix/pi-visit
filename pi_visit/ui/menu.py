@@ -13,8 +13,8 @@ class Menu(QMainWindow):
         self.win_single = None
         self.win_settings = None
 
-        self.button_single = QPushButton("Push for Single QR")
-        self.button_multi = QPushButton("Push for Multi QR")
+        self.button_single = QPushButton("Single QR")
+        self.button_multi = QPushButton("Multi QR")
         self.button_settings = QPushButton("Settings")
         self.button_single.clicked.connect(self.show_single_qr_window)
         self.button_multi.clicked.connect(self.show_multi_qr_window)
@@ -26,25 +26,30 @@ class Menu(QMainWindow):
         self.menu_layout.addWidget(self.button_multi)
         self.menu_layout.addWidget(self.button_settings)
         self.setCentralWidget(self.widget)
+        self.setWindowTitle("pi-visit")
 
 
     def show_multi_qr_window(self):
 
-        if self.win_multi is None:
-            self.win_multi = qr.MultiQr()
-            self.win_multi.show()
-        elif not self.win_multi.isVisible():
-            self.win_multi.show()
-            self.win_multi.reset()
+        if not self.check_window_open(self.win_single):
+            if self.win_multi is None:
+                self.win_multi = qr.MultiQr()
+                self.win_multi.show()
+            elif not self.win_multi.isVisible():
+                self.win_multi.show()
+                self.win_multi.reset()
+
 
     def show_single_qr_window(self):
-        
-        if self.win_single is None:
-            self.win_single = qr.SingleQR()
-            self.win_single.show()
-        elif not self.win_single.isVisible():
-            self.win_single.show()
-            self.win_single.reset()
+
+        if not self.check_window_open(self.win_multi):
+            if self.win_single is None:
+                self.win_single = qr.SingleQR()
+                self.win_single.show()
+            elif not self.win_single.isVisible():
+                self.win_single.show()
+                self.win_single.reset()
+
 
     def show_settings_window(self):
 
@@ -54,6 +59,17 @@ class Menu(QMainWindow):
         elif not self.win_settings.isVisible():
             self.win_settings.show()
             self.win_settings.reset()
+            
+    
+    def check_window_open(self, window):
+
+        if window is None:
+            return False
+        elif window.isVisible():
+            return True
+        else:
+            return False
+        
 
 
         

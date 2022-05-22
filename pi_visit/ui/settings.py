@@ -29,18 +29,7 @@ class settings(QWidget):
         self.check_config_exists()
         self.read_config()
 
-        """
-            640 x 360 (nHD)
-            854 x 480 (FWVGA)
-            960 x 540 (qHD)
-            1024 x 576 (WSVGA)
-            1280 x 720 (HD/WXGA)
-            1366 x 768 (FWXGA)
-            1600 x 900 (HD+)
-            1920 x 1080 (FHD)
-        """
 
-        
 
     def setup_ui(self):
 
@@ -52,23 +41,28 @@ class settings(QWidget):
         
         self.res_box.currentIndexChanged.connect(self.res_box_change)
 
-        self.button_save = QPushButton("Save")
+        self.button_save = QPushButton("Apply")
         self.button_save.clicked.connect(self.update_config)
+        self.button_save.setEnabled(False)
         
         layout.addWidget(self.res_box)
         layout.addWidget(self.button_save)
         self.setLayout(layout)
         self.setWindowTitle("Settings")
 
-    def res_box_change(self):
 
-        self.selected_res = self.res_box.currentText()
-        print(self.selected_res)
+    def res_box_change(self):
+        
+        if self.selected_res != self.res_box.currentText():
+            self.selected_res = self.res_box.currentText()
+            self.button_save.setEnabled(True)
+
 
     def check_config_exists(self):
         if not os.path.exists(self.directory + 'config.ini'):
 
             self.create_config()
+
 
     def create_config(self):
         config = configparser.ConfigParser()
@@ -79,6 +73,7 @@ class settings(QWidget):
 
         with open(self.directory + 'config.ini', 'w') as configfile:
             config.write(configfile)
+
 
     def update_config(self):
 
@@ -92,6 +87,7 @@ class settings(QWidget):
 
         with open(self.directory + 'config.ini', 'w') as configfile:
             config.write(configfile)
+
     
     def read_config(self):
         
@@ -103,26 +99,13 @@ class settings(QWidget):
 
         self.set_res_box()
 
+
     def set_res_box(self):
 
         index = self.res_box.findText(self.selected_res)
         self.res_box.setCurrentIndex(index)
 
+
     def default_config(self):
         pass
 
-
-
-    file_exists = os.path.exists('readme.txt')
-
-"""
-   
-
-    https://stackoverflow.com/questions/19078170/python-how-would-you-save-a-simple-settings-config-file
-
-https://blog.finxter.com/creating-reading-updating-a-config-file-with-python/
-    
-
-
-    
-"""
