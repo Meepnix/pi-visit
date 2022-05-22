@@ -1,14 +1,14 @@
 from PySide2.QtCore import QSize, QTimer
 from PySide2.QtGui import QImage, QPixmap, QFont
 from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout, QMessageBox
-
-from pi_visit.scan import scan
-
 from abc import ABCMeta, abstractmethod
 import cv2
 import sys
-
+import configparser
+import os
 import pygame
+
+from pi_visit.scan import scan
 
 
 class Qr(QWidget):
@@ -16,13 +16,17 @@ class Qr(QWidget):
     def __init__(self):
         
         super().__init__()
-        self.video_size = QSize(960, 540)
+        self.video_size = QSize(640, 360)
+        self.frame = ""
+        self.quit = False
+        self.directory = os.environ['MAIN_DIRECTORY']
+
         self.setup_ui()
+        self.read_config_update()
         self.setup_camera()
         self.setup_sound()
         self.scan = scan.Scan()
-        self.frame = ""
-        self.quit = False
+        
 
     def setup_ui(self):
 
@@ -45,8 +49,10 @@ class Qr(QWidget):
     def setup_camera(self):
         
         self.capture = cv2.VideoCapture(0)
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.video_size.width())
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.video_size.height())
+        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 
+            self.video_size.width())
+        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 
+            self.video_size.height())
         self.timer = QTimer()
         self.timer.timeout.connect(self.display_video_stream)
         self.timer.start(30)
@@ -69,8 +75,10 @@ class Qr(QWidget):
         if not self.quit:
             self.capture.release()
             self.capture = cv2.VideoCapture(0)
-            self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.video_size.width())
-            self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.video_size.height())
+            self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 
+                self.video_size.width())
+            self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 
+                self.video_size.height())
             self.timer.start(30)
     
     def release_scan(self):
@@ -80,7 +88,8 @@ class Qr(QWidget):
     def setup_sound(self):
         
         pygame.init()
-        pygame.mixer.music.load("/home/pi/Documents/Projects/pi-visit/sounds/beep-sound.wav")
+        pygame.mixer.music.load(
+            "/home/pi/Documents/Projects/pi-visit/sounds/beep-sound.wav")
 
     def play_success_sound(self):
 
@@ -100,9 +109,24 @@ class Qr(QWidget):
         else:
             event.ignore()
 
+    def read_config_update(self):
+        config = configparser.ConfigParser()
+        config.read(self.directory + 'config.ini')
+        res_param = config['camera']
+        
+        self.video_size = QSize(int(res_param['resolution_width']),
+            int(res_param['resolution_height']))
+
+        self.update_ui_settings()
+
+    def update_ui_settings(self):
+        self.image_label.setFixedSize(self.video_size)
+
     def reset(self):
+        self.read_config_update()
         self.quit = False
         self.continue_scan()
+        
 
 
 class MultiQr(Qr):
@@ -123,7 +147,7 @@ class MultiQr(Qr):
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
 
         image = QImage(self.frame, self.frame.shape[1], self.frame.shape[0], 
-                       self.frame.strides[0], QImage.Format_RGB888)
+            self.frame.strides[0], QImage.Format_RGB888)
         self.image_label.setPixmap(QPixmap.fromImage(image))
 
 
@@ -149,7 +173,7 @@ class SingleQR(Qr):
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
 
         image = QImage(self.frame, self.frame.shape[1], self.frame.shape[0], 
-                       self.frame.strides[0], QImage.Format_RGB888)
+            self.frame.strides[0], QImage.Format_RGB888)
         self.image_label.setPixmap(QPixmap.fromImage(image))
 
     def get_title(self):
