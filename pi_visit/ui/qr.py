@@ -11,7 +11,9 @@ import pygame
 from pi_visit.scan import scan
 
 
+
 class Qr(QWidget):
+
     
     def __init__(self):
         
@@ -27,7 +29,7 @@ class Qr(QWidget):
         self.setup_sound()
         self.scan = scan.Scan()
 
-        
+
     def setup_ui(self):
 
         self.title_label = QLabel()
@@ -52,9 +54,9 @@ class Qr(QWidget):
         
         self.capture = cv2.VideoCapture(0)
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 
-            self.video_size.width())
+                         self.video_size.width())
         self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 
-            self.video_size.height())
+                         self.video_size.height())
         self.timer = QTimer()
         self.timer.timeout.connect(self.display_video_stream)
         self.timer.start(30)
@@ -75,19 +77,19 @@ class Qr(QWidget):
         self.status_label.setText(self.scan.get_status())
         self.status_label.show()
 
-    
+
     def continue_scan(self):
 
         if not self.quit:
             self.capture.release()
             self.capture = cv2.VideoCapture(0)
             self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 
-                self.video_size.width())
+                             self.video_size.width())
             self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 
-                self.video_size.height())
+                             self.video_size.height())
             self.timer.start(30)
 
-    
+
     def release_scan(self):
         self.timer.stop()
         self.capture.release()
@@ -105,10 +107,11 @@ class Qr(QWidget):
         print('play sound')
         pygame.mixer.music.play()
 
-        
+
     def closeEvent(self, event):
         print("event")
-        reply = QMessageBox.question(self, 'Message',
+        reply = QMessageBox.question(
+            self, 'Message',
             "Are you sure to quit?", QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
@@ -125,7 +128,8 @@ class Qr(QWidget):
         config.read(self.directory + 'config.ini')
         res_param = config['camera']
         
-        self.video_size = QSize(int(res_param['resolution_width']),
+        self.video_size = QSize(
+            int(res_param['resolution_width']),
             int(res_param['resolution_height']))
 
         self.update_ui_settings()
@@ -139,6 +143,7 @@ class Qr(QWidget):
         self.read_config_update()
         self.quit = False
         self.continue_scan()
+
         
 
 class MultiQr(Qr):
@@ -158,7 +163,8 @@ class MultiQr(Qr):
 
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
 
-        image = QImage(self.frame, self.frame.shape[1], self.frame.shape[0], 
+        image = QImage(
+            self.frame, self.frame.shape[1], self.frame.shape[0], 
             self.frame.strides[0], QImage.Format_RGB888)
         self.image_label.setPixmap(QPixmap.fromImage(image))
 
@@ -168,8 +174,9 @@ class MultiQr(Qr):
         return "Multi Scan QR"
 
 
+
 class SingleQR(Qr):
-    
+
     
     def display_video_stream(self):
         
@@ -184,8 +191,10 @@ class SingleQR(Qr):
 
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
 
-        image = QImage(self.frame, self.frame.shape[1], self.frame.shape[0], 
-            self.frame.strides[0], QImage.Format_RGB888)
+        image = QImage(
+            self.frame, self.frame.shape[1], 
+            self.frame.shape[0], self.frame.strides[0], 
+            QImage.Format_RGB888)
         self.image_label.setPixmap(QPixmap.fromImage(image))
 
 

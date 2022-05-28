@@ -7,6 +7,7 @@ from pi_visit.ui import qr, settings
 
 class Menu(QMainWindow):
 
+
     def __init__(self):
         super().__init__()
         self.win_multi = None
@@ -58,9 +59,8 @@ class Menu(QMainWindow):
             self.win_settings.show()
         elif not self.win_settings.isVisible():
             self.win_settings.show()
-            self.win_settings.reset()
             
-    
+            
     def check_window_open(self, window):
 
         if window is None:

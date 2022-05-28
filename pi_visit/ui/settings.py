@@ -5,7 +5,9 @@ import configparser
 import os
 
 
+
 class settings(QWidget):
+
 
     def __init__(self):
 
@@ -20,8 +22,8 @@ class settings(QWidget):
             '1366 x 768': {'width' : '1366', 'height' : '768'},
             '1600 x 900': {'width' : '1600', 'height' : '900'},
             '1920 x 1080': {'width' : '1920', 'height' : '1080'}
-            
         }
+        
         self.directory = os.environ['MAIN_DIRECTORY']
         self.selected_res = ""
 
@@ -29,11 +31,12 @@ class settings(QWidget):
         self.check_config_exists()
         self.read_config()
 
-
-
     def setup_ui(self):
 
+
         layout = QVBoxLayout()
+        self.res_label = QLabel()
+        self.res_label.setFont(QFont('Arial', 12))
         self.res_box = QComboBox()
         
         for res in self.resolutions:
@@ -45,6 +48,7 @@ class settings(QWidget):
         self.button_save.clicked.connect(self.update_config)
         self.button_save.setEnabled(False)
         
+        layout.addWidget(self.res_label)
         layout.addWidget(self.res_box)
         layout.addWidget(self.button_save)
         self.setLayout(layout)
@@ -87,8 +91,10 @@ class settings(QWidget):
 
         with open(self.directory + 'config.ini', 'w') as configfile:
             config.write(configfile)
+        
+        self.set_res_label()
 
-    
+
     def read_config(self):
         
         config = configparser.ConfigParser()
@@ -98,14 +104,17 @@ class settings(QWidget):
         self.selected_res = res_param['resolution']
 
         self.set_res_box()
+        self.set_res_label()
 
 
     def set_res_box(self):
 
         index = self.res_box.findText(self.selected_res)
         self.res_box.setCurrentIndex(index)
+        
 
+    def set_res_label(self):
 
-    def default_config(self):
-        pass
+        self.res_label.setText(self.selected_res)
+
 
